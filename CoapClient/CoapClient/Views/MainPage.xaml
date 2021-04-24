@@ -1,0 +1,99 @@
+﻿<Page
+    x:Class="CoapClient.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    Style="{StaticResource PageStyle}"
+    mc:Ignorable="d">
+    <i:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:InvokeCommandAction Command="{x:Bind ViewModel.LoadedCommand}" />
+        </core:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            x:Uid="Main_Title"
+            Style="{StaticResource PageTitleStyle}" />
+        <Grid
+            Grid.Row="1" 
+            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Estado" />
+                <ToggleSwitch IsOn="{x:Bind ViewModel.IsOn, Mode=TwoWay}" >
+                    <i:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="Toggled">
+                            <core:InvokeCommandAction Command="{x:Bind ViewModel.OnToggledCommand}" />
+                        </core:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </ToggleSwitch>
+                <TextBlock Text="Modo" />
+                <ToggleSwitch IsOn="{x:Bind ViewModel.IsAuto, Mode=TwoWay}" OffContent="Manual" OnContent="Auto">
+                    <i:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="Toggled">
+                            <core:InvokeCommandAction Command="{x:Bind ViewModel.ModeToggledCommand}" />
+                        </core:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </ToggleSwitch>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Humedad de encendido" Margin="0,0,26,0" VerticalAlignment="Center" />
+                    <TextBox Text="{x:Bind ViewModel.Humidity, Mode=TwoWay}" TextChanged="TextBox_TextChanged" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Temperatura de encendido" Margin="0,0,10,0" VerticalAlignment="Center" />
+                    <TextBox Text="{x:Bind ViewModel.Temp,Mode=TwoWay}" TextChanged="TextBox_TextChanged" />
+                </StackPanel>
+                <Button Content="Actualizar configuración">
+                    <i:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="Click">
+                            <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateConfigCommand}" />
+                        </core:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </Button>
+            </StackPanel>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Temperatura reportada: " Margin="0,0,10,0" />
+                        <TextBlock Text="{x:Bind ViewModel.RepTemp, Mode=OneWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Humedad reportada: " Margin="0,0,10,0" />
+                        <TextBlock Text="{x:Bind ViewModel.RepHumidity, Mode=OneWay}" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="IPv6 Cliente 2:" />
+                    <TextBox Text="{x:Bind ViewModel.MacAddress, Mode=TwoWay}" />
+                    <Slider Value="{x:Bind ViewModel.RefreshRate, Mode=TwoWay}" StepFrequency="1" Minimum="1" Maximum="10" Header="Velocidad de refresh" />
+                    <Button Content="Enviar">
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="Click">
+                                <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateRefreshRate}" />
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
